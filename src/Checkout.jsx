@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import ProductList from "./components/ProductList"
 import Cart from "./components/Cart"
 
@@ -66,32 +66,19 @@ const Checkout = () => {
           ...pro,cartQuantity:0
       } : pro ))
 
-      /*updateProducts(products.map((pro) => {
-        if(pro.id === product.id){
-          return {...pro,cartQuantity:0}
-        }else{
-          return pro
-        }
-      }))*/
-
       //find the item in the cart with the id
       const cartIndex = cartItems.findIndex(c => c.id === product.id);
 
       updateCartItems(cartItems.filter((cart,index) => index !== cartIndex))
 
-      //subtract item price to cart subTotal
-      //updateCart({...cart,subTotal:cart.subTotal - products[index].price,...cart,totalPrice:cart.subTotal - cart.discount})
 
-      //update total price
-      //updateCart({...cart,totalPrice:cart.subTotal - cart.discount})
-
-      const newCarCart = {
-        subTotal: cart.subTotal - products[index].price,
-        totalPrice: cart.subTotal - cart.discount,
-        discount:  cart.discount,
+      const newCarS = {
+        subTotal:cart.subTotal - products[index].price,
+        totalPrice:0,
       }
-      updateCart(newCarCart)
 
+      updateCart({...newCarS,totalPrice:newCarS.subTotal - discount})
+      
     }
 
     const itemAdded = (product) => {
@@ -114,35 +101,26 @@ const Checkout = () => {
       //then push a new item into the cart
       updateCartItems([...cartItems,newCart])
 
+      //then update cart subtotal and total
       const newCarS = {
         subTotal:cart.subTotal + products[index].price,
+        totalPrice:0,
       }
-      const newCarT = {
-        totalPrice:newCarS.subTotal - 10
-      }
+  
 
-      updateCart({...newCarS,...newCarT})
+      updateCart({...newCarS,totalPrice:newCarS.subTotal - discount})
 
     }
-
 
 
     const useCoupon = (coupon) => {
-
-      //updateCart({...cart,discount:coupon})
-      //updateCart({...cart,totalPrice: cart.subTotal - cart.discount})
-
-      /*const newCarCart = {
-        subTotal: cart.subTotal,
-        totalPrice: cart.subTotal - cart.discount,
-        discount: coupon,
-      }
-      updateCart(newCarCart)*/
-
-      //updateCart({...cart,discount:coupon})
-      updateCart({...cart,totalPrice: cart.subTotal - cart.discount})
-
+      updateDiscount(coupon)
     }
+
+    useEffect(() => {
+      updateCart({...cart,totalPrice:cart.subTotal - discount})
+      //updateCart(cart => cart.totalPrice:cart.subTotal - discount)
+    }, [discount]);
 
     return(
         <div className="layout-row">
