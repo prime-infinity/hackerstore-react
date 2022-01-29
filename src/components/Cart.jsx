@@ -1,4 +1,4 @@
-const Cart = ({ cart,cartItems, couponSelected }) => {
+const Cart = ({ cart,discount,cartItems, couponSelected }) => {
 
     return(
         <div>
@@ -48,7 +48,7 @@ const Cart = ({ cart,cartItems, couponSelected }) => {
                     </li>
                     <li className="layout-row justify-content-between py-12 caption font-weight-light">
                     <span>Discount (-)</span>
-                    <span className="discount" data-testid="cart-discount">${ cart.discount }</span>
+                    <span className="discount" data-testid="cart-discount">${ discount }</span>
                     </li>
                     <li className="layout-row justify-content-between py-12 font-weight-bold">
                     <span>Total</span>

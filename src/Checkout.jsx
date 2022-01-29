@@ -48,9 +48,9 @@ const Checkout = () => {
     const [ cart, updateCart ] = useState({
       subTotal: 0,
       totalPrice: 0,
-      discount: 0,
-      selectedCoupon: 0
     })
+
+    const [discount, updateDiscount] = useState(0)
 
     const [cartItems, updateCartItems] = useState([])
 
@@ -88,8 +88,7 @@ const Checkout = () => {
       const newCarCart = {
         subTotal: cart.subTotal - products[index].price,
         totalPrice: cart.subTotal - cart.discount,
-        discount: 0,
-        selectedCoupon: 0
+        discount:  cart.discount,
       }
       updateCart(newCarCart)
 
@@ -115,19 +114,14 @@ const Checkout = () => {
       //then push a new item into the cart
       updateCartItems([...cartItems,newCart])
 
-      //add item price to cart subTotal
-      //updateCart({...cart,subTotal:cart.subTotal + products[index].price})
-
-      //update total price
-      //updateCart({...cart,totalPrice:cart.subTotal - cart.discount})
-
-      const newCarCart = {
-        subTotal: cart.subTotal + products[index].price,
-        totalPrice: cart.subTotal - cart.discount,
-        discount: 0,
-        selectedCoupon: 0
+      const newCarS = {
+        subTotal:cart.subTotal + products[index].price,
       }
-      updateCart(newCarCart)
+      const newCarT = {
+        totalPrice:newCarS.subTotal - 10
+      }
+
+      updateCart({...newCarS,...newCarT})
 
     }
 
@@ -138,13 +132,15 @@ const Checkout = () => {
       //updateCart({...cart,discount:coupon})
       //updateCart({...cart,totalPrice: cart.subTotal - cart.discount})
 
-      const newCarCart = {
+      /*const newCarCart = {
         subTotal: cart.subTotal,
         totalPrice: cart.subTotal - cart.discount,
         discount: coupon,
-        selectedCoupon: 0
       }
-      updateCart(newCarCart)
+      updateCart(newCarCart)*/
+
+      //updateCart({...cart,discount:coupon})
+      updateCart({...cart,totalPrice: cart.subTotal - cart.discount})
 
     }
 
@@ -152,7 +148,7 @@ const Checkout = () => {
         <div className="layout-row">
 
             <ProductList removeItem={itemRemoved} addItem={itemAdded} products={products} />
-            <Cart couponSelected={useCoupon} cartItems={cartItems} cart={cart} />
+            <Cart couponSelected={useCoupon} cartItems={cartItems} cart={cart} discount={discount} />
 
         </div>   
     )
